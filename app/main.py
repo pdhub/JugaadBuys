@@ -3,11 +3,25 @@ from typing import Optional
 from fastapi import FastAPI, Request
 import numpy as np
 import pickle
-popular_df = pickle.load(open('popular.pkl','rb'))
-books = pickle.load(open('books.pkl','rb'))
-pt = pickle.load(open('pt.pkl','rb'))
-similarity_scores = pickle.load(open('similarity_scores.pkl','rb'))
+import fastapi.middleware.cors as _cors
+
+books = pickle.load(open('books.pkl', 'rb'))
+pt = pickle.load(open('pt.pkl', 'rb'))
+popular_df = pickle.load(open('popular.pkl', 'rb'))
+
+similarity_scores = pickle.load(open('similarity_scores.pkl', 'rb'))
 app = FastAPI()
+origins = [
+    "chrome-extension://dolklfceonknnlohdppmadpgnoohoajj"
+]
+
+app.add_middleware(
+    _cors.CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ["GET"],
+    allow_headers = ["*"]
+)
 
 @app.get('/')
 def root():
